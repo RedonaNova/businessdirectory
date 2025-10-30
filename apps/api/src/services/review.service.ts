@@ -1,4 +1,4 @@
-import { Reviews } from '@businessdirectory/database';
+import { Reviews, ReviewsListResponse } from '@businessdirectory/database';
 import { BaseService } from './base.service';
 import { prisma } from '../utils/prisma';
 import {
@@ -18,7 +18,7 @@ export class ReviewService extends BaseService<
     pagination: PaginationParams,
     sort: SortParams,
     filter: FilterParams
-  ): Promise<{ data: Reviews[]; total: number }> {
+  ): Promise<{ data: ReviewsListResponse[]; total: number }> {
     const [data, total] = await Promise.all([
       prisma.reviews.findMany({
         skip: pagination.skip,
@@ -32,6 +32,11 @@ export class ReviewService extends BaseService<
               email: true,
               firstName: true,
               lastName: true,
+              _count: {
+                select: {
+                  reviews: true,
+                },
+              },
             },
           },
           business: {
@@ -47,7 +52,25 @@ export class ReviewService extends BaseService<
       prisma.reviews.count({ where: filter.where }),
     ]);
 
-    return { data, total };
+    // Transform user data to include totalReviews
+    const transformedData = data.map((review) => ({
+      ...review,
+      user: {
+        ...review.user,
+        totalReviews: review.user._count.reviews,
+      },
+    }));
+
+    // Remove _count from user objects
+    const dataWithoutCount = transformedData.map((review) => {
+      const { _count, ...userWithoutCount } = review.user;
+      return {
+        ...review,
+        user: userWithoutCount,
+      };
+    });
+
+    return { data: dataWithoutCount as ReviewsListResponse[], total };
   }
 
   async findById(id: number): Promise<Reviews | null> {

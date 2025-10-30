@@ -79,7 +79,7 @@ export default async function YellowBooksList({
                     <div className="flex flex-row  gap-5 ">
                       <Link
                         className="mt-2"
-                        href={`/businesses/${business.id}`}
+                        href={`/yellow-books/${business.id}`}
                       >
                         <Image
                           src={business.photo}
@@ -92,7 +92,7 @@ export default async function YellowBooksList({
 
                       <div className="flex flex-col gap-1">
                         <Link
-                          href={`/businesses/${business.id}`}
+                          href={`/yellow-books/${business.id}`}
                           className="hover:text-secondary duration-300 hover:underline"
                         >
                           {business.name}

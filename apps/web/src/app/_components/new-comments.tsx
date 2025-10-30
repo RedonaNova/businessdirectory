@@ -51,7 +51,7 @@ function CommentCard({ comment }: { comment: ReviewsListResponse }) {
         />
         <Link
           className="text-sm text-muted"
-          href={`/businesses/${comment.business.id}`}
+          href={`/yellow-books/${comment.business.id}`}
         >
           {comment.business.name}
         </Link>

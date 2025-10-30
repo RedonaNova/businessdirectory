@@ -2,6 +2,9 @@ import CategoriesGrid from './_components/categories-grid';
 import CategoriesSearch from './_components/categories-search';
 
 import { Suspense } from 'react';
+
+// Revalidate this route every 60 seconds (ISR)
+export const revalidate = 60;
 export default function HomePage() {
   return (
     <div className="">
