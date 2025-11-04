@@ -29,7 +29,7 @@ businessdirectory/
 
 ### Prerequisites
 
-- Node.js 20+
+- At least Node.js 20.16.0!!
 - MySQL database
 - Git
 
@@ -56,6 +56,7 @@ Create a `.env` file in the root directory:
 
 ```bash
 # Push schema to database
+npx nx run @businessdirectory/database:prisma:generate
 npx nx run @businessdirectory/database:prisma:push
 
 # Seed database with sample data
@@ -72,7 +73,10 @@ npx nx run @businessdirectory/database:prisma:studio
 npm run dev:api
 
 # Run Next.js frontend
+npm run dev
+or
 npx nx serve web
+
 ```
 
 The API will be available at `http://localhost:3333` and the web app at `http://localhost:4200`.
