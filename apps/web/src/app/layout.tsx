@@ -1,16 +1,14 @@
 import './globals.css';
-import Header from '../components/Header';
-import { JetBrains_Mono } from 'next/font/google';
-import Footer from '../components/Footer';
-const jetbrainsMono = JetBrains_Mono({
+import { Montserrat } from 'next/font/google';
+const monsteratt = Montserrat({
   subsets: ['latin'],
   weight: ['100', '200', '300', '400', '500', '600', '700', '800'],
-  variable: '--font-jetbrainsMono',
+  variable: '--font-monsteratt',
 });
 
 export const metadata = {
-  title: 'Welcome to Business Directory',
-  description: 'Welcome to Business Directory',
+  title: 'Yellow Book',
+  description: 'Yellow Book',
 };
 
 export default function RootLayout({
@@ -20,11 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="mn">
-      <body className={`${jetbrainsMono.variable} font-sans`}>
-        <Header />
-        {children}
-        <Footer />
-      </body>
+      <body className={`${monsteratt.variable} font-sans`}>{children}</body>
     </html>
   );
 }

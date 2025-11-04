@@ -1,9 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { z } from 'zod';
-import { ResponseHandler } from '../utils/response';
 import { catchAsync } from '../utils/catchAsync';
 import { validate } from '../middlewares/validate';
-import { AppError } from '../utils/AppError';
 
 const router = Router();
 
@@ -51,12 +49,7 @@ router.get(
 
     // Validate response with Zod schema before sending
     const validatedData = HealthCheckResponseSchema.parse(healthData);
-
-    return ResponseHandler.success(
-      res,
-      validatedData,
-      'Health check passed - Array validation successful'
-    );
+    res.status(200).json({ validatedData, message: 'health passed' });
   })
 );
 
@@ -69,11 +62,7 @@ router.post(
   '/test',
   validate(TestInputSchema),
   catchAsync(async (req: Request, res: Response) => {
-    return ResponseHandler.success(
-      res,
-      { message: 'Validation passed', input: req.body },
-      'Test successful'
-    );
+    res.status(200).json({ message: 'validation passed' });
   })
 );
 
@@ -101,26 +90,7 @@ router.get(
 
     // Validate array with Zod
     const validatedArray = TestArraySchema.parse(testData);
-
-    return ResponseHandler.success(
-      res,
-      validatedArray,
-      'Array validation successful - Zod check passed'
-    );
-  })
-);
-
-/**
- * POST /api/v1/health/test-error
- * Intentionally triggers validation error
- * Demonstrates: 400 error on invalid input
- */
-router.post(
-  '/test-error',
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  catchAsync(async (req: Request, res: Response) => {
-    // This will always throw 400 error
-    throw new AppError('Invalid input provided', 400, 'VALIDATION_ERROR');
+    res.status(200).json({ validatedArray, message: 'health passed, zod' });
   })
 );
 

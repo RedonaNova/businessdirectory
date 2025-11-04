@@ -5,9 +5,7 @@
   "scripts": {
     "dev": "cd apps/api && npx nodemon",
     "dev:api": "cd apps/api && npx nodemon",
-    "start:api": "node apps/api/dist/main.js",
-    "db:seed": "npx tsx apps/api/src/helpers/seed.ts",
-    "db:reset": "npx nx run @businessdirectory/database:prisma:push && npm run db:seed"
+    "start:api": "node apps/api/dist/main.js"
   },
   "private": true,
   "dependencies": {
