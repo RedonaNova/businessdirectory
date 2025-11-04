@@ -2,8 +2,6 @@
 import * as FaIcons from 'react-icons/fa';
 import { BusinessProfileResponse } from '@businessdirectory/database';
 import Link from 'next/link';
-import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
 import Image from 'next/image';
 export default async function BusinessProfile({
   businessData,

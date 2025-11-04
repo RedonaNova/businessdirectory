@@ -1,3 +1,0 @@
-{"level":"info","message":"🚀 Server is running on http://localhost:3333","timestamp":"2025-10-08T20:47:16.677+08:00","userId":"system"}
-{"level":"info","message":"📚 API Documentation: http://localhost:3333/api/v1","timestamp":"2025-10-08T20:47:16.678+08:00","userId":"system"}
-{"level":"info","message":"🏥 Health Check: http://localhost:3333/api/v1/health","timestamp":"2025-10-08T20:47:16.678+08:00","userId":"system"}
