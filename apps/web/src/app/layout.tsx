@@ -20,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="mn">
-      <body className={`${jetbrainsMono.variable} font-sans`}>
+      <body className={`${jetbrainsMono.variable} h-screen font-sans`}>
         <Header />
         {children}
         <Footer />

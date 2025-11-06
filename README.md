@@ -73,9 +73,7 @@ npx nx run @businessdirectory/database:prisma:studio
 npm run dev:api
 
 # Run Next.js frontend
-npm run dev
-or
-npx nx serve web
+nx dev web
 
 ```
 

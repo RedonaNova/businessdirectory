@@ -1,12 +1,12 @@
 import YellowBooksList from './_components/yellow-books-list';
 
 import { Suspense } from 'react';
-export default function HomePage({
+export default async function YellowBooksPage({
   searchParams,
 }: {
-  searchParams: { categoryId: string; parentCategoryId: string };
+  searchParams: Promise<{ categoryId: string; parentCategoryId: string }>;
 }) {
-  const { categoryId, parentCategoryId } = searchParams;
+  const { categoryId, parentCategoryId } = await searchParams;
   return (
     <div className="">
       <div className="flex mb-10 justify-center  items-center flex-col w-full">

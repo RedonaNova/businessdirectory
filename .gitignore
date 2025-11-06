@@ -59,3 +59,5 @@ apps/web/logs/
 # Log files and folders
 logs/
 */logs/
+**/logs/*.json
+**/logs/.*-audit.json

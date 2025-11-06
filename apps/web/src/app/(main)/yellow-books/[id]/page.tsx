@@ -4,7 +4,7 @@ import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 
 export const revalidate = 60;
-export const dynamicParams = true;
+// export const dynamicParams = true;
 
 export async function generateStaticParams() {
   const response = await fetch(

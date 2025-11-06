@@ -69,8 +69,10 @@ export class BusinessService extends BaseService<
     const dataWithAverage = data.map((business) => {
       const avg =
         business.reviews.length > 0
-          ? business.reviews.reduce((sum, r) => sum + r.rating, 0) /
-            business.reviews.length
+          ? (
+              business.reviews.reduce((sum, r) => sum + r.rating, 0) /
+              business.reviews.length
+            ).toFixed(1)
           : null;
 
       //omit reviews list from data
@@ -134,8 +136,10 @@ export class BusinessService extends BaseService<
     const totalReviews = business.reviews.length;
     const averageRating =
       totalReviews > 0
-        ? business.reviews.reduce((sum, review) => sum + review.rating, 0) /
-          totalReviews
+        ? (
+            business.reviews.reduce((sum, review) => sum + review.rating, 0) /
+            totalReviews
+          ).toFixed(1)
         : null;
 
     // Calculate rating distribution

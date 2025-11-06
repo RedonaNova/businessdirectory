@@ -1,9 +1,6 @@
 'use server';
 import * as FaIcons from 'react-icons/fa';
-import {
-  BusinessParentCategoryListResponse,
-  BusinessWithExtras,
-} from '@businessdirectory/database';
+import { BusinessWithExtras } from '@businessdirectory/database';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import SideMenu from './side-menu';
