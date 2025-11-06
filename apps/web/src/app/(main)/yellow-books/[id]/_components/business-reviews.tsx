@@ -4,7 +4,12 @@ import { ReviewsListResponse } from '@businessdirectory/database';
 export default async function BusinessReviews({ id }: { id: number }) {
   const reviews = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/reviews?businessId=${id}`,
-    { cache: 'no-store' }
+    {
+      next: {
+        revalidate: 60, // ISR: Revalidate reviews every 60 seconds
+        tags: [`reviews-${id}`],
+      },
+    }
   );
   const reviewsData: ReviewsListResponse[] = (await reviews.json()).data;
   const totalReviews = reviewsData.length;

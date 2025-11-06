@@ -38,11 +38,11 @@ export default function FirstSearch() {
           Хайх, унших, сэтгэгдэл бичих
         </h2>
         <Link
-          href="/all"
+          href="/yellow-books/search"
           className="group shadow-xl cursor-pointer py-4 mt-5 xl:mt-10 px-6 rounded-4xl bg-background w-full flex items-center justify-between transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:bg-secondary/60"
         >
           <div className="text-muted group-hover:text-white transition-colors duration-300">
-            Компани эсвэл төрлөөр хайх..
+            Хүссэн газраа хайх..
           </div>
           <div className="bg-secondary p-2 text-white rounded-full transition-transform duration-300 group-hover:rotate-12">
             <CiSearch className="size-8" />

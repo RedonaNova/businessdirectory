@@ -54,20 +54,20 @@ model VerificationToken {
 }
 
 model BusinessParentCategory {
-  id          Int    @id @default(autoincrement())
+  id          Int                @id @default(autoincrement())
   name        String
   description String
-  icon String
-  createdAt  DateTime           @default(now())
-  updatedAt  DateTime           @updatedAt
-  categories BusinessCategory[]
+  icon        String
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  categories  BusinessCategory[]
 }
 
 model BusinessCategory {
-  id          Int    @id @default(autoincrement())
-  name        String
-  description String
-  icon String
+  id               Int                    @id @default(autoincrement())
+  name             String
+  description      String
+  icon             String
   createdAt        DateTime               @default(now())
   updatedAt        DateTime               @updatedAt
   businesses       Business[]
@@ -82,7 +82,7 @@ model Business {
   photo        String
   link         String?
   summary      String
-  richContent  String            @db.Text
+  richContent  String            @db.LongText
   isActive     Boolean           @default(true)
   isInsideMall Boolean           @default(false)
   description  String?

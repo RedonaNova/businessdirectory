@@ -52,16 +52,20 @@ function BusinessList({ businesses }: { businesses: BusinessWithExtras[] }) {
           >
             <div className="flex flex-col gap-2">
               <div>
-                <Image
-                  className="rounded-xl  border-border border-2"
-                  src={business.photo}
-                  alt={business.name}
-                  width={100}
-                  height={100}
-                />
+                <Link href={`/yellow-books/${business.id}`}>
+                  <Image
+                    className="rounded-xl  border-border border-2"
+                    src={business.photo}
+                    alt={business.name}
+                    width={100}
+                    height={100}
+                  />
+                </Link>
               </div>
             </div>
-            <h4 className=" text-base font-semibold">{business.name}</h4>
+            <h4 className=" text-base font-semibold">
+              <Link href={`/yellow-books/${business.id}`}>{business.name}</Link>
+            </h4>
             <Link className="text-muted text-xs" href={`${business.link}`}>
               {business.link}
             </Link>

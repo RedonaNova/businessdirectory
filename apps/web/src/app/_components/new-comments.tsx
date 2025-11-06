@@ -18,7 +18,7 @@ export default async function NewComments() {
           <CiCircleChevRight className="size-8 cursor-pointer hover:scale-110 transition-all duration-300 xl:size-10" />
         </div>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         {commentsData.map((comment, id) => (
           <CommentCard key={id} comment={comment} />
         ))}

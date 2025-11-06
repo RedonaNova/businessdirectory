@@ -8,7 +8,10 @@ export default async function SideMenu({
   parentCategoryId: number;
 }) {
   const categories = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/business-categories?parentCategoryId=${parentCategoryId}`
+    `${process.env.NEXT_PUBLIC_BASE_URL}/business-categories?parentCategoryId=${parentCategoryId}`,
+    {
+      next: { revalidate: 60, tags: ['categories-sidebar'] },
+    }
   );
   const categoriesData: BusinessCategoryListResponse[] = (
     await categories.json()

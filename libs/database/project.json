@@ -21,7 +21,11 @@
     "prisma:push": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prisma db push --schema=libs/database/prisma/schema.prisma",
+        "commands": [
+          "prisma db push --schema=libs/database/prisma/schema.prisma",
+          "tsx libs/database/scripts/fix-generated-zod.ts"
+        ],
+        "parallel": false,
         "cwd": "{workspaceRoot}"
       }
     },

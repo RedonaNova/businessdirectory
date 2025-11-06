@@ -86,17 +86,29 @@ export async function SideRating({
 }: {
   businessData: BusinessProfileResponse;
 }) {
+  const averageRating = businessData.reviewStatistics.averageRating || 0;
+
+  const getRatingText = (rating: number): string => {
+    if (rating >= 4.5) return 'Маш сайн';
+    if (rating >= 3.5) return 'Сайн';
+    if (rating >= 2.5) return 'Дунд';
+    if (rating >= 1.5) return 'Муу';
+    return 'Маш муу';
+  };
+
   return (
     <div className="border w-full max-w-xs border-border rounded-xl ">
       <div className="flex flex-row gap-4 border-b p-4 border-border w-full justify-between items-center">
-        <div className="flex flex-col gap-3 items-center justify-center">
-          <h1 className="text-5xl font-extrabold">
-            {businessData.reviewStatistics.averageRating}
+        <div className="flex flex-col gap-3 items-center justify-center flex-shrink-0 min-w-[100px]">
+          <h1 className="text-5xl font-extrabold text-center">
+            {averageRating}
           </h1>
-          {businessData.reviewStatistics.averageRating! > 0 && (
-            <span>Маш сайн</span>
+          {averageRating > 0 && (
+            <span className="text-center whitespace-nowrap">
+              {getRatingText(averageRating)}
+            </span>
           )}
-          <span className="text-muted text-sm">
+          <span className="text-muted text-sm text-center">
             Cэтгэгдэл {businessData.reviewStatistics.totalReviews}
           </span>
         </div>
