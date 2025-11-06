@@ -43,7 +43,8 @@
     ".next",
     "eslint.config.js",
     "eslint.config.cjs",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "../../libs/database/src/generated/**/*"
   ],
   "references": [
     {

@@ -7,8 +7,7 @@
     "dev:api": "cd apps/api && npx nodemon",
     "start:api": "node apps/api/dist/main.js",
     "db:seed": "npx tsx apps/api/src/helpers/seed.ts",
-    "db:reset": "npx nx run @businessdirectory/database:prisma:push && npm run db:seed",
-    "postinstall": "npx tsx libs/database/scripts/fix-generated-zod.ts || true"
+    "db:reset": "npx nx run @businessdirectory/database:prisma:push && npm run db:seed"
   },
   "private": true,
   "dependencies": {

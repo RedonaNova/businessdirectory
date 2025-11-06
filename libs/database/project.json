@@ -3,11 +3,7 @@
     "prisma:generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "prisma generate --schema=libs/database/prisma/schema.prisma",
-          "tsx libs/database/scripts/fix-generated-zod.ts"
-        ],
-        "parallel": false,
+        "command": "prisma generate --schema=libs/database/prisma/schema.prisma",
         "cwd": "{workspaceRoot}"
       }
     },
@@ -21,11 +17,7 @@
     "prisma:push": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "prisma db push --schema=libs/database/prisma/schema.prisma",
-          "tsx libs/database/scripts/fix-generated-zod.ts"
-        ],
-        "parallel": false,
+        "command": "prisma db push --schema=libs/database/prisma/schema.prisma",
         "cwd": "{workspaceRoot}"
       }
     },

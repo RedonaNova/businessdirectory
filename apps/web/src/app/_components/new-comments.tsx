@@ -4,30 +4,49 @@ import Link from 'next/link';
 import { CiCircleChevLeft, CiCircleChevRight } from 'react-icons/ci';
 import Image from 'next/image';
 export default async function NewComments() {
-  const comments = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/reviews?page=1&limit=12&sortBy=createdAt&sortOrder=desc`
-  );
-  const commentsData: ReviewsListResponse[] = (await comments.json()).data;
-  // console.log('commentsData', comments);
-  return (
-    <div className="flex flex-col gap-10">
-      <div className="flex justify-between items-center">
-        <h3>Шинэ сэтгэгдлүүд</h3>
-        <div className="flex items-center gap-2">
-          <CiCircleChevLeft className="size-8 cursor-pointer hover:scale-110 transition-all duration-300 xl:size-10" />
-          <CiCircleChevRight className="size-8 cursor-pointer hover:scale-110 transition-all duration-300 xl:size-10" />
+  try {
+    const comments = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/reviews?page=1&limit=12&sortBy=createdAt&sortOrder=desc`,
+      {
+        next: {
+          revalidate: 60, // Revalidate every 60 seconds
+          tags: ['reviews'], // Cache tag for on-demand revalidation
+        },
+      }
+    );
+    const commentsData: ReviewsListResponse[] =
+      (await comments.json())?.data || [];
+
+    if (!commentsData || commentsData.length === 0) {
+      return null;
+    }
+
+    return (
+      <div className="flex flex-col gap-10">
+        <div className="flex justify-between items-center">
+          <h3>Шинэ сэтгэгдлүүд</h3>
+          <div className="flex items-center gap-2">
+            <CiCircleChevLeft className="size-8 cursor-pointer hover:scale-110 transition-all duration-300 xl:size-10" />
+            <CiCircleChevRight className="size-8 cursor-pointer hover:scale-110 transition-all duration-300 xl:size-10" />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          {commentsData.map((comment, id) => (
+            <CommentCard key={id} comment={comment} />
+          ))}
         </div>
       </div>
-      <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-        {commentsData.map((comment, id) => (
-          <CommentCard key={id} comment={comment} />
-        ))}
-      </div>
-    </div>
-  );
+    );
+  } catch {
+    return null;
+  }
 }
 function CommentCard({ comment }: { comment: ReviewsListResponse }) {
-  const initialLetterOfName = comment.user.firstName[0];
+  if (!comment?.user || !comment?.business) {
+    return null;
+  }
+
+  const initialLetterOfName = comment.user.firstName?.[0] || '?';
   return (
     <div className="rounded-xl border flex flex-col gap-2 border-border p-4">
       <div className=" gap-2 flex flex-row">
@@ -36,7 +55,7 @@ function CommentCard({ comment }: { comment: ReviewsListResponse }) {
         </div>
 
         <div className="flex leading-tight flex-col gap-2">
-          <h3 className="text-base">{comment.user.firstName}</h3>
+          <h3 className="text-base">{comment.user.firstName || 'User'}</h3>
           <p className="text-sm text-muted">{comment.rating}</p>
         </div>
       </div>
