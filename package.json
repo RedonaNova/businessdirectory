@@ -44,6 +44,7 @@
     "@eslint/compat": "^1.1.1",
     "@eslint/eslintrc": "^2.1.1",
     "@eslint/js": "^9.8.0",
+    "@lhci/cli": "^0.15.1",
     "@next/eslint-plugin-next": "^15.2.4",
     "@nx/eslint": "21.6.2",
     "@nx/eslint-plugin": "21.6.2",
@@ -72,6 +73,7 @@
     "eslint-plugin-react": "7.35.0",
     "eslint-plugin-react-hooks": "5.0.0",
     "jsonc-eslint-parser": "^2.1.0",
+    "lighthouse": "^13.0.1",
     "nx": "21.6.2",
     "prettier": "^2.6.2",
     "prisma": "^6.17.0",
@@ -80,6 +82,7 @@
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
+    "web-vitals": "^5.1.0",
     "webpack-cli": "^5.1.4"
   },
   "workspaces": [

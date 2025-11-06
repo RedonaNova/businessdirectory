@@ -2,11 +2,157 @@
 
 ## Overview
 
-This document summarizes the advanced Next.js v15 App Router rendering techniques implemented across the yellow-books application, focusing on performance improvements measured via TTFB (Time to First Byte) and LCP (Largest Contentful Paint).
+This document summarizes the advanced Next.js v15 App Router rendering techniques implemented across the yellow-books application, focusing on performance improvements measured via Lighthouse and Web Vitals metrics.
+
+## Core Web Vitals Definitions & Targets
+
+### Time to First Byte (TTFB)
+
+**Definition**: The time from when a user requests a page until the first byte of the response is received from the server.  
+**Targets**:
+
+- **Good**: < 200ms (static pages)
+- **Needs Improvement**: 200-800ms (SSR pages)
+- **Poor**: > 800ms
+
+### Largest Contentful Paint (LCP)
+
+**Definition**: The render time of the largest image or text block visible within the viewport.  
+**Targets**:
+
+- **Good**: < 2.5s
+- **Needs Improvement**: 2.5s - 4.0s
+- **Poor**: > 4.0s
+
+### Interaction to Next Paint (INP)
+
+**Definition**: A metric that assesses a page's responsiveness to user interactions by measuring the latency of all click, keyboard, and pointer interactions that occur throughout the lifespan of a page.  
+**Targets**:
+
+- **Good**: < 200ms
+- **Needs Improvement**: 200ms - 500ms
+- **Poor**: > 500ms
+
+### Cumulative Layout Shift (CLS)
+
+**Definition**: A metric that quantifies how much visible content shifts during page load.  
+**Targets**:
+
+- **Good**: < 0.1
+- **Needs Improvement**: 0.1 - 0.25
+- **Poor**: > 0.25
+
+### First Contentful Paint (FCP)
+
+**Definition**: The time from navigation to when the browser renders the first bit of content from the DOM.  
+**Targets**:
+
+- **Good**: < 1.8s
+- **Needs Improvement**: 1.8s - 3.0s
+- **Poor**: > 3.0s
+
+### Total Blocking Time (TBT)
+
+**Definition**: The sum of all time periods between FCP and TTI where the main thread was blocked for 50ms or longer.  
+**Targets**:
+
+- **Good**: < 200ms
+- **Needs Improvement**: 200ms - 600ms
+- **Poor**: > 600ms
+
+---
+
+## Lighthouse Results (Desktop)
+
+**Test Date**: November 6, 2025, 2:16 PM GMT+8  
+**Lighthouse Version**: 12.8.2  
+**Environment**: Emulated Desktop with custom throttling
+
+### Navigation Analysis (Initial Load)
+
+| Metric             | Score      | Status       |
+| ------------------ | ---------- | ------------ |
+| **Performance**    | **99-100** | ✅ Excellent |
+| **Accessibility**  | **96-100** | ✅ Excellent |
+| **Best Practices** | **96-100** | ✅ Excellent |
+| **SEO**            | **100**    | ✅ Perfect   |
+
+#### Core Web Vitals
+
+- **FCP (First Contentful Paint)**: **0.2s** ✅ (Target: < 1.8s)
+- **LCP (Largest Contentful Paint)**: **0.5s** ✅ (Target: < 2.5s)
+- **TBT (Total Blocking Time)**: **0ms** ✅ (Target: < 200ms)
+- **CLS (Cumulative Layout Shift)**: **0** ✅ (Target: < 0.1)
+- **SI (Speed Index)**: **0.2s** ✅
+
+#### Opportunities Identified
+
+- **Minify JavaScript**: Potential savings of 237 KiB
+- **Reduce unused JavaScript**: Potential savings of 276 KiB
+- **Avoid serving legacy JavaScript**: Potential savings of 11 KiB
+- **Render blocking requests**: Est savings of 10 ms
+- **Use efficient cache lifetimes**: Est savings of 82 KiB
+- **Improve image delivery**: Est savings of 776 KiB
+
+### Timespan Analysis (User Interactions)
+
+| Metric             | Score     | Status       |
+| ------------------ | --------- | ------------ |
+| **Performance**    | **20/22** | ✅ Excellent |
+| **Best Practices** | **7/8**   | ✅ Excellent |
+
+#### Interaction Metrics
+
+- **INP (Interaction to Next Paint)**: **20ms** ✅ (Target: < 200ms)
+- **TBT (Total Blocking Time)**: **0ms** ✅ (Target: < 200ms)
+- **CLS (Cumulative Layout Shift)**: **0** ✅ (Target: < 0.1)
+
+---
 
 ## Implemented Rendering Strategies
 
-### 1. `/yellow-books` - ISR (Incremental Static Regeneration) + Streaming
+### 1. `/` (Home Page) - ISR (Incremental Static Regeneration) + Streaming
+
+**What Changed:**
+
+- Added `export const revalidate = 60` to enable ISR with 60-second revalidation
+- Implemented React Suspense boundaries with skeleton loaders for:
+  - `CategoryRecommendation` component
+  - `BestInCategories` component
+  - `NewComments` component
+- Added `next: { revalidate: 60, tags: ['categories', 'businesses-list', 'reviews'] }` to fetch calls
+- Streamed multiple sections independently for progressive rendering
+
+**Why It Helped:**
+
+- **ISR**: Home page is pre-rendered at build time, then regenerated every 60 seconds:
+  - Fast initial load (static HTML)
+  - Fresh content (automatic background updates)
+  - Reduced server load (cached pages)
+- **Streaming**: Multiple Suspense boundaries allow different sections to render independently:
+  - Category recommendations render first
+  - Best in categories loads asynchronously
+  - New comments stream in separately
+  - Better perceived performance (users see content progressively)
+
+**Performance Impact:**
+
+- **FCP**: **0.2s** (excellent, well below 1.8s target)
+- **LCP**: **0.5s** (excellent, well below 2.5s target)
+- **TBT**: **0ms** (perfect, no blocking time)
+- **CLS**: **0** (perfect, no layout shift)
+- **Performance Score**: **95/100** (Lighthouse)
+
+**Next Risk:**
+
+- Cache invalidation: If home page data changes frequently, 60s might be too long
+  - **Mitigation**: Implement on-demand revalidation via API route `/api/revalidate`
+- Stale featured content: If critical updates happen between revalidation windows
+  - **Mitigation**: Use revalidation tags for immediate updates when categories/businesses change
+
+---
+
+### 2. `/yellow-books` - ISR (Incremental Static Regeneration) + Streaming
 
 **What Changed:**
 
@@ -28,9 +174,9 @@ This document summarizes the advanced Next.js v15 App Router rendering technique
 
 **Performance Impact:**
 
-- **TTFB**: Reduced from ~800ms (SSR) to ~50ms (cached static page)
-- **LCP**: Improved from ~2.5s to ~1.2s by streaming content in chunks
+- **LCP**: Optimized through streaming content in chunks
 - **User Experience**: Users see skeleton loaders immediately, then content progressively
+- **CLS**: Minimized through skeleton loaders matching exact content dimensions
 
 **Next Risk:**
 
@@ -41,7 +187,7 @@ This document summarizes the advanced Next.js v15 App Router rendering technique
 
 ---
 
-### 2. `/yellow-books/[id]` - SSG (Static Site Generation) + On-Demand Revalidation
+### 3. `/yellow-books/[id]` - SSG (Static Site Generation) + On-Demand Revalidation
 
 **What Changed:**
 
@@ -69,9 +215,9 @@ This document summarizes the advanced Next.js v15 App Router rendering technique
 
 **Performance Impact:**
 
-- **TTFB**: Reduced from ~600ms (SSR) to ~20ms (static file)
-- **LCP**: Improved from ~2.0s to ~0.8s (profile loads immediately)
+- **LCP**: Optimized through streaming profile and reviews separately
 - **Build Time**: Adds ~5-10 seconds for 50 static pages (acceptable trade-off)
+- **User Experience**: Profile loads immediately, reviews stream in separately
 
 **Next Risk:**
 
@@ -83,7 +229,7 @@ This document summarizes the advanced Next.js v15 App Router rendering technique
 
 ---
 
-### 3. `/yellow-books/search` - SSR (Server-Side Rendering) + Client Map Island
+### 4. `/yellow-books/search` - SSR (Server-Side Rendering) + Client Map Island
 
 **What Changed:**
 
@@ -107,9 +253,9 @@ This document summarizes the advanced Next.js v15 App Router rendering technique
 
 **Performance Impact:**
 
-- **TTFB**: ~400-600ms (expected for SSR with fresh data)
-- **LCP**: ~1.5s (search results load first, map loads after)
+- **LCP**: Optimized by loading search results first, map loads after
 - **Bundle Size**: Reduced by ~200KB (map library only on search page)
+- **User Experience**: Fresh search results, progressive map enhancement
 
 **Next Risk:**
 
@@ -122,111 +268,47 @@ This document summarizes the advanced Next.js v15 App Router rendering technique
 
 ---
 
-## Suspense Fallbacks
-
-**What Changed:**
-
-- Created dedicated skeleton components matching actual content structure:
-  - `YellowBooksListSkeleton` - matches business list layout
-  - `SideMenuSkeleton` - matches sidebar categories
-  - `BusinessProfileSkeleton` - matches business profile
-  - `BusinessReviewsSkeleton` - matches reviews list
-  - `SearchResultsSkeleton` - matches search results
-- All skeletons use `animate-pulse` for visual feedback
-- Skeletons match exact dimensions and layout of real content
-
-**Why It Helped:**
-
-- **Better UX**: Users see immediate visual feedback (not blank screens)
-- **Reduced Layout Shift**: Skeletons match real content dimensions (prevents CLS)
-- **Perceived Performance**: Users feel the app is faster even if load time is similar
-- **Accessibility**: Screen readers announce loading state
-
-**Performance Impact:**
-
-- **CLS (Cumulative Layout Shift)**: Reduced from 0.15 to ~0.02
-- **User Satisfaction**: Improved perceived performance scores
-
----
-
 ## Performance Monitoring
 
-**What Added:**
+Performance is monitored using Lighthouse and Web Vitals. The current implementation achieves excellent scores across all metrics:
 
-- Created `PerformanceMonitor` component that tracks:
-  - **TTFB**: Time to First Byte (server response time)
-  - **LCP**: Largest Contentful Paint (main content visibility)
-  - **FCP**: First Contentful Paint (first visual content)
-  - Additional metrics: DNS, TCP, Request, Response times
-- Logs metrics to console and sends to analytics (if configured)
-- Can be added to root layout for global monitoring
+- **Performance Score**: 99-100/100
+- **Accessibility**: 96-100/100
+- **Best Practices**: 96-100/100
+- **SEO**: 100/100
 
-**How to Use:**
+All Core Web Vitals are meeting or exceeding targets:
 
-```tsx
-import { PerformanceMonitor } from '@/components/performance-monitor';
-
-export default function RootLayout({ children }) {
-  return (
-    <html>
-      <body>
-        <PerformanceMonitor />
-        {children}
-      </body>
-    </html>
-  );
-}
-```
-
-**Metrics to Monitor:**
-
-- **Target TTFB**: < 200ms (static), < 800ms (SSR)
-- **Target LCP**: < 2.5s (good), < 4.0s (acceptable)
-- **Target FCP**: < 1.8s
+- **FCP**: 0.2s (88% better than 1.8s target)
+- **LCP**: 0.5s (80% better than 2.5s target)
+- **TBT**: 0ms (perfect)
+- **CLS**: 0 (perfect)
+- **INP**: 20ms (90% better than 200ms target)
 
 ---
 
 ## Performance Summary
 
-| Route                  | Strategy            | TTFB Before | TTFB After | LCP Before | LCP After | Improvement                      |
-| ---------------------- | ------------------- | ----------- | ---------- | ---------- | --------- | -------------------------------- |
-| `/yellow-books`        | ISR + Streaming     | ~800ms      | ~50ms      | ~2.5s      | ~1.2s     | **94% TTFB, 52% LCP**            |
-| `/yellow-books/[id]`   | SSG + On-Demand     | ~600ms      | ~20ms      | ~2.0s      | ~0.8s     | **97% TTFB, 60% LCP**            |
-| `/yellow-books/search` | SSR + Client Island | N/A         | ~500ms     | N/A        | ~1.5s     | **Fresh data, optimized bundle** |
+### Lighthouse Scores (Desktop)
 
----
+| Route                  | Strategy            | Performance | FCP  | LCP  | TBT | CLS | INP  | Status |
+| ---------------------- | ------------------- | ----------- | ---- | ---- | --- | --- | ---- | ------ |
+| `/` (Home)             | ISR + Streaming     | 100         | 0.2s | 0.5s | 0ms | 0   | 20ms | ✅     |
+| `/yellow-books`        | ISR + Streaming     | Optimized   | 0.3s | 0.4s | 0ms | 0   | 30ms | ✅     |
+| `/yellow-books/[id]`   | SSG + On-Demand     | Optimized   | 0.7s | 0.9s | 0ms | 0   | 70ms | ✅     |
+| `/yellow-books/search` | SSR + Client Island | Optimized   | -    | -    | -   | -   | -    | ✅     |
 
-## Next Steps & Recommendations
+### Performance Achievements
 
-### Immediate Improvements
+- ✅ **FCP**: 0.2s (exceeds target by 88%)
+- ✅ **LCP**: 0.5s (exceeds target by 80%)
+- ✅ **TBT**: 0ms (perfect score)
+- ✅ **CLS**: 0 (perfect score)
+- ✅ **INP**: 20ms (exceeds target by 90%)
+- ✅ **Performance Score**: 95/100
+- ✅ **SEO**: 100/100
 
-1. **Add Performance Monitor to Layout**: Enable global performance tracking
-2. **Implement Revalidation Hooks**: Connect API updates to cache invalidation
-3. **Optimize Images**: Use Next.js Image component with proper sizing (already done)
-
-### Future Optimizations
-
-1. **Edge Caching**: Deploy static pages to edge locations (Vercel Edge Network)
-2. **Database Query Optimization**: Reduce API response times for better TTFB
-3. **Bundle Analysis**: Analyze and optimize client bundle size
-4. **A/B Testing**: Test different revalidation intervals for optimal freshness vs performance
-
-### Monitoring
-
-- Set up real user monitoring (RUM) for production metrics
-- Create alerts for TTFB > 1s or LCP > 4s
-- Track cache hit rates for ISR pages
-- Monitor revalidation frequency
-
----
-
-## Conclusion
-
-The implementation of advanced Next.js rendering strategies has significantly improved performance:
-
-- **94-97% reduction in TTFB** for static/ISR pages
-- **52-60% improvement in LCP** through streaming and optimization
-- **Better user experience** with skeleton loaders and progressive rendering
-- **Scalable architecture** ready for production traffic
-
-The hybrid approach (ISR for listings, SSG for details, SSR for search) optimizes for both performance and freshness, ensuring users get fast, up-to-date content.
+![/](./perf-log/mainPage-perf.png)
+![/yellow-books/categories](./perf-log/CategoryPage-perf.png)
+![/yellow-books](./perf-log/yellowBook-perf.png)
+![/yellow-books/[id]](./perf-log/dynamicPage-perf.png)

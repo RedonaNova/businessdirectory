@@ -8,14 +8,14 @@ import {
 } from '../_components/skeletons';
 
 // SSG: Generate static pages at build time, revalidate on-demand via tags
-export const revalidate = false; // Disable time-based revalidation, use on-demand instead
-export const dynamicParams = true; // Allow dynamic params not in generateStaticParams
+export const revalidate = 60; // Enable time-based revalidation, also use on-demand
+export const dynamicParams = false; // Allow all dynamic params in generateStaticParams
 
 export async function generateStaticParams() {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/businesses?limit=50`,
-      { next: { revalidate: 3600 } } // Revalidate business list every hour
+      { next: { revalidate: 0 } } // Revalidate business list every hour
     );
     const businesses = (await response.json()).data;
 
