@@ -48,9 +48,16 @@ Thumbs.db
 out
 
 test-output
-.env
 logs/
 /logs
 apps/api/logs/
 apps/web/logs/
+# Environment variables
 .env
+
+
+# Log files and folders
+logs/
+*/logs/
+**/logs/*.json
+**/logs/.*-audit.json

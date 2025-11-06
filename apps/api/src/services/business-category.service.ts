@@ -1,4 +1,7 @@
-import { BusinessCategory } from '@businessdirectory/database';
+import {
+  BusinessCategory,
+  BusinessCategoryListResponse,
+} from '@businessdirectory/database';
 import { BaseService } from './base.service';
 import { prisma } from '../utils/prisma';
 import {
@@ -21,7 +24,7 @@ export class BusinessCategoryService extends BaseService<
     pagination: PaginationParams,
     sort: SortParams,
     filter: FilterParams
-  ): Promise<{ data: BusinessCategory[]; total: number }> {
+  ): Promise<{ data: BusinessCategoryListResponse[]; total: number }> {
     const [data, total] = await Promise.all([
       prisma.businessCategory.findMany({
         skip: pagination.skip,
@@ -32,12 +35,19 @@ export class BusinessCategoryService extends BaseService<
           _count: {
             select: { businesses: true },
           },
+          parentCategory: {
+            select: {
+              icon: true,
+              id: true,
+              name: true,
+            },
+          },
         },
       }),
       prisma.businessCategory.count({ where: filter.where }),
     ]);
 
-    return { data, total };
+    return { data: data as BusinessCategoryListResponse[], total };
   }
 
   async findById(id: number): Promise<BusinessCategory | null> {

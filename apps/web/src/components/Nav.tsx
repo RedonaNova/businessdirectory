@@ -4,7 +4,7 @@ export default function Nav() {
   return (
     <div className="flex items-center gap-8">
       <Link
-        href={`/yellow-books`}
+        href={`/yellow-books/categories`}
         className="hover:text-primary duration-300 text-xl font-bold"
       >
         Төрөл

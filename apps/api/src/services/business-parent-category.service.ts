@@ -1,4 +1,7 @@
-import { BusinessParentCategory } from '@businessdirectory/database';
+import {
+  BusinessParentCategory,
+  BusinessParentCategoryListResponse,
+} from '@businessdirectory/database';
 import { BaseService } from './base.service';
 import { prisma } from '../utils/prisma';
 import {
@@ -21,7 +24,7 @@ export class BusinessParentCategoryService extends BaseService<
     pagination: PaginationParams,
     sort: SortParams,
     filter: FilterParams
-  ): Promise<{ data: BusinessParentCategory[]; total: number }> {
+  ): Promise<{ data: BusinessParentCategoryListResponse[]; total: number }> {
     const [data, total] = await Promise.all([
       prisma.businessParentCategory.findMany({
         skip: pagination.skip,
@@ -32,6 +35,7 @@ export class BusinessParentCategoryService extends BaseService<
           _count: {
             select: { categories: true },
           },
+          categories: true,
         },
       }),
       prisma.businessParentCategory.count({ where: filter.where }),
