@@ -13,17 +13,32 @@ export const dynamicParams = false; // Allow all dynamic params in generateStati
 
 export async function generateStaticParams() {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/businesses?limit=50`,
-      { next: { revalidate: 0 } } // Revalidate business list every hour
-    );
-    const businesses = (await response.json()).data;
+    // During build time, the backend might not be available
+    // Return empty array to allow build to succeed, pages will be generated dynamically
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      return [];
+    }
+
+    const response = await fetch(`${baseUrl}/businesses?limit=50`, {
+      next: { revalidate: 3600 }, // Cache for 1 hour during build
+    });
+
+    if (!response.ok) {
+      console.warn('Failed to fetch businesses for static params, falling back to dynamic rendering');
+      return [];
+    }
+
+    const data = await response.json();
+    const businesses = data?.data || [];
 
     return businesses.map((business: { id: number }) => ({
       id: String(business.id),
     }));
   } catch (error) {
-    console.error('Error generating static params:', error);
+    // If fetch fails (e.g., backend not available during build), return empty array
+    // Pages will be generated dynamically at request time
+    console.warn('Error generating static params, falling back to dynamic rendering:', error);
     return [];
   }
 }
@@ -35,23 +50,33 @@ export default async function BusinessPage({
 }) {
   const { id } = await params;
 
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/businesses/${id}`,
-    {
+  let businessData;
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      notFound();
+    }
+
+    const response = await fetch(`${baseUrl}/businesses/${id}`, {
       next: {
         revalidate: false, // SSG: no time-based revalidation
         tags: [`business-${id}`], // On-demand revalidation via tag
       },
+    });
+
+    if (!response.ok) {
+      notFound();
     }
-  );
 
-  if (!response.ok) {
-    notFound();
-  }
+    const data = await response.json();
+    businessData = data?.data;
 
-  const businessData = (await response.json()).data;
-
-  if (!businessData) {
+    if (!businessData) {
+      notFound();
+    }
+  } catch (error) {
+    // If fetch fails during build, show 404
+    console.error('Error fetching business data:', error);
     notFound();
   }
 
