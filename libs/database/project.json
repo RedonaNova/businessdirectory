@@ -3,8 +3,12 @@
     "prisma:generate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prisma generate --schema=libs/database/prisma/schema.prisma",
-        "cwd": "{workspaceRoot}"
+        "commands": [
+          "prisma generate --schema=libs/database/prisma/schema.prisma",
+          "npx tsx libs/database/scripts/fix-generated-ts.ts"
+        ],
+        "cwd": "{workspaceRoot}",
+        "parallel": false
       }
     },
     "prisma:migrate": {

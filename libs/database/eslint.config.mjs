@@ -17,6 +17,20 @@ export default [
     },
   },
   {
-    ignores: ['**/out-tsc', '**/generated/**', 'src/generated/**'],
+    ignores: [
+      '**/out-tsc',
+      '**/generated/**',
+      'src/generated/**',
+      '**/@prisma/**',
+      '**/node_modules/**',
+      '**/dist/**',
+    ],
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    rules: {
+      // Disable module boundaries rule for database library due to Prisma client resolution issues
+      '@nx/enforce-module-boundaries': 'off',
+    },
   },
 ];

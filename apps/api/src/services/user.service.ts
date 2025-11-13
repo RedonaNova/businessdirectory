@@ -47,7 +47,6 @@ export class UserService extends BaseService<
     ]);
 
     // Remove hashedPassword from results
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const sanitizedData = data.map(({ hashedPassword: _, ...user }) => ({
       ...user,
       hashedPassword: null,

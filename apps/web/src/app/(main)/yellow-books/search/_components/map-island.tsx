@@ -46,7 +46,7 @@ export default function MapIsland({ points }: MapIslandProps) {
       // Default center to Ulaanbaatar if no points
       let centerLat = 47.8864;
       let centerLng = 106.9057;
-      let zoom = 13;
+      const zoom = 13;
 
       if (points.length > 0) {
         // Calculate bounds

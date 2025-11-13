@@ -3,8 +3,11 @@ name: CI
 on:
   push:
     branches:
-      - master
+      - main
+      - test
   pull_request:
+    branches:
+      - main
 
 permissions:
   actions: read
@@ -32,6 +35,9 @@ jobs:
           cache: 'npm'
 
       - run: npm ci --legacy-peer-deps
+
+      # Generate Prisma client before building
+      - run: npx nx run @businessdirectory/database:prisma:generate
 
       # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
       # - run: npx nx-cloud record -- echo Hello World
