@@ -1,9 +1,6 @@
 'use server';
 import * as FaIcons from 'react-icons/fa';
-import {
-  BusinessParentCategoryListResponse,
-  BusinessWithExtras,
-} from '@businessdirectory/database';
+import { BusinessWithExtras } from '@businessdirectory/database';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import SideMenu from './side-menu';
@@ -16,12 +13,12 @@ export default async function YellowBooksList({
   categoryId: string;
   parentCategoryId: string;
 }) {
-  let categoryType = categoryId
+  const categoryType = categoryId
     ? 'categoryId'
     : parentCategoryId
     ? 'parentCategoryId'
     : null;
-  let categoryValue = categoryId || parentCategoryId;
+  const categoryValue = categoryId || parentCategoryId;
   const businesses = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/businesses?limit=50&${
       categoryType ? `${categoryType}=${categoryValue}` : ''

@@ -7,14 +7,38 @@ export const revalidate = 60;
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/businesses?limit=50`
-  );
-  const businesses = (await response.json()).data;
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      return [];
+    }
 
-  return businesses.map((business: { id: number }) => ({
-    id: String(business.id),
-  }));
+    const response = await fetch(`${baseUrl}/businesses?limit=50`, {
+      // Add timeout and error handling for build time
+      next: { revalidate: 3600 }, // Cache for 1 hour during build
+    });
+
+    if (!response.ok) {
+      console.warn(
+        'Failed to fetch businesses for static params, falling back to dynamic rendering'
+      );
+      return [];
+    }
+
+    const data = await response.json();
+    const businesses = data?.data || [];
+
+    return businesses.map((business: { id: number }) => ({
+      id: String(business.id),
+    }));
+  } catch (error) {
+    // Pages will be generated dynamically at request time
+    console.warn(
+      'Error generating static params, falling back to dynamic rendering:',
+      error
+    );
+    return [];
+  }
 }
 
 export default async function BusinessPage({

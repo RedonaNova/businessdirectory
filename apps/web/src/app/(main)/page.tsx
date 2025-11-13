@@ -4,6 +4,10 @@ import NewComments from '../_components/new-comments';
 import TryOurBusiness from '../_components/try-our-business';
 import BestInCategories from '../_components/best-in-categories';
 import { Suspense } from 'react';
+
+// Force dynamic rendering since we depend on backend API
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   return (
     <div className="">

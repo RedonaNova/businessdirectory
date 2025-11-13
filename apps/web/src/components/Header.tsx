@@ -16,7 +16,7 @@ export default function Header() {
             className="w-10 h-10 xl:w-12 xl:h-12 rounded-xl"
           />
           <h1 className="text-lg xl:text-2xl font-bold leading-tight flex flex-col ">
-            <span>Radnaa's</span>
+            <span>Radnaa&apos;s</span>
             <span>
               Directory <span className="text-primary">.</span>
             </span>

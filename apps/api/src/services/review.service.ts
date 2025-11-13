@@ -63,7 +63,7 @@ export class ReviewService extends BaseService<
 
     // Remove _count from user objects
     const dataWithoutCount = transformedData.map((review) => {
-      const { _count, ...userWithoutCount } = review.user;
+      const { _count: _, ...userWithoutCount } = review.user;
       return {
         ...review,
         user: userWithoutCount,
@@ -92,7 +92,6 @@ export class ReviewService extends BaseService<
   }
 
   // Base interface implementation (not used directly in ReviewController)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async create(_data: CreateReviewDTO): Promise<Reviews> {
     throw new AppError(
       'Use createWithUserId method instead',
@@ -163,7 +162,6 @@ export class ReviewService extends BaseService<
   }
 
   // Base interface implementation (not used directly in ReviewController)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async update(_id: number, _data: UpdateReviewDTO): Promise<Reviews> {
     throw new AppError(
       'Use updateWithUserId method instead',

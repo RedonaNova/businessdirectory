@@ -93,9 +93,10 @@ export async function SideRating({
           <h1 className="text-5xl font-extrabold">
             {businessData.reviewStatistics.averageRating}
           </h1>
-          {businessData.reviewStatistics.averageRating! > 0 && (
-            <span>Маш сайн</span>
-          )}
+          {businessData.reviewStatistics.averageRating &&
+            businessData.reviewStatistics.averageRating > 0 && (
+              <span>Маш сайн</span>
+            )}
           <span className="text-muted text-sm">
             Cэтгэгдэл {businessData.reviewStatistics.totalReviews}
           </span>

@@ -1,3 +1,4 @@
+// @ts-nocheck - Generated file, ignore TypeScript errors
 import { z } from 'zod';
 import type { Prisma } from '@prisma/client';
 
@@ -5,58 +6,167 @@ import type { Prisma } from '@prisma/client';
 // HELPER FUNCTIONS
 /////////////////////////////////////////
 
-
 /////////////////////////////////////////
 // ENUMS
 /////////////////////////////////////////
 
-export const TransactionIsolationLevelSchema = z.enum(['ReadUncommitted','ReadCommitted','RepeatableRead','Serializable']);
+export const TransactionIsolationLevelSchema = z.enum([
+  'ReadUncommitted',
+  'ReadCommitted',
+  'RepeatableRead',
+  'Serializable',
+]);
 
-export const UserScalarFieldEnumSchema = z.enum(['id','email','firstName','lastName','phone','hashedPassword','role','createdAt','updatedAt']);
+export const UserScalarFieldEnumSchema = z.enum([
+  'id',
+  'email',
+  'firstName',
+  'lastName',
+  'phone',
+  'hashedPassword',
+  'role',
+  'createdAt',
+  'updatedAt',
+]);
 
-export const VerificationTokenScalarFieldEnumSchema = z.enum(['id','email','token','expires','createdAt','action']);
+export const VerificationTokenScalarFieldEnumSchema = z.enum([
+  'id',
+  'email',
+  'token',
+  'expires',
+  'createdAt',
+  'action',
+]);
 
-export const BusinessParentCategoryScalarFieldEnumSchema = z.enum(['id','name','description','icon','createdAt','updatedAt']);
+export const BusinessParentCategoryScalarFieldEnumSchema = z.enum([
+  'id',
+  'name',
+  'description',
+  'icon',
+  'createdAt',
+  'updatedAt',
+]);
 
-export const BusinessCategoryScalarFieldEnumSchema = z.enum(['id','name','description','icon','createdAt','updatedAt','parentCategoryId']);
+export const BusinessCategoryScalarFieldEnumSchema = z.enum([
+  'id',
+  'name',
+  'description',
+  'icon',
+  'createdAt',
+  'updatedAt',
+  'parentCategoryId',
+]);
 
-export const BusinessScalarFieldEnumSchema = z.enum(['id','name','email','photo','link','summary','richContent','isActive','isInsideMall','description','createdAt','updatedAt','categoryId']);
+export const BusinessScalarFieldEnumSchema = z.enum([
+  'id',
+  'name',
+  'email',
+  'photo',
+  'link',
+  'summary',
+  'richContent',
+  'isActive',
+  'isInsideMall',
+  'description',
+  'createdAt',
+  'updatedAt',
+  'categoryId',
+]);
 
-export const BusinessAddressScalarFieldEnumSchema = z.enum(['id','businessId','address','latitude','longitude','createdAt','updatedAt']);
+export const BusinessAddressScalarFieldEnumSchema = z.enum([
+  'id',
+  'businessId',
+  'address',
+  'latitude',
+  'longitude',
+  'createdAt',
+  'updatedAt',
+]);
 
-export const BusinessAdminScalarFieldEnumSchema = z.enum(['id','businessId','userId','createdAt','updatedAt']);
+export const BusinessAdminScalarFieldEnumSchema = z.enum([
+  'id',
+  'businessId',
+  'userId',
+  'createdAt',
+  'updatedAt',
+]);
 
-export const ReviewsScalarFieldEnumSchema = z.enum(['id','businessId','userId','rating','comment','createdAt','updatedAt']);
+export const ReviewsScalarFieldEnumSchema = z.enum([
+  'id',
+  'businessId',
+  'userId',
+  'rating',
+  'comment',
+  'createdAt',
+  'updatedAt',
+]);
 
-export const RichReviewContentScalarFieldEnumSchema = z.enum(['id','content','createdAt','updatedAt','reviewId']);
+export const RichReviewContentScalarFieldEnumSchema = z.enum([
+  'id',
+  'content',
+  'createdAt',
+  'updatedAt',
+  'reviewId',
+]);
 
-export const SortOrderSchema = z.enum(['asc','desc']);
+export const SortOrderSchema = z.enum(['asc', 'desc']);
 
-export const NullsOrderSchema = z.enum(['first','last']);
+export const NullsOrderSchema = z.enum(['first', 'last']);
 
-export const UserOrderByRelevanceFieldEnumSchema = z.enum(['email','firstName','lastName','phone','hashedPassword']);
+export const UserOrderByRelevanceFieldEnumSchema = z.enum([
+  'email',
+  'firstName',
+  'lastName',
+  'phone',
+  'hashedPassword',
+]);
 
-export const VerificationTokenOrderByRelevanceFieldEnumSchema = z.enum(['email','token']);
+export const VerificationTokenOrderByRelevanceFieldEnumSchema = z.enum([
+  'email',
+  'token',
+]);
 
-export const BusinessParentCategoryOrderByRelevanceFieldEnumSchema = z.enum(['name','description','icon']);
+export const BusinessParentCategoryOrderByRelevanceFieldEnumSchema = z.enum([
+  'name',
+  'description',
+  'icon',
+]);
 
-export const BusinessCategoryOrderByRelevanceFieldEnumSchema = z.enum(['name','description','icon']);
+export const BusinessCategoryOrderByRelevanceFieldEnumSchema = z.enum([
+  'name',
+  'description',
+  'icon',
+]);
 
-export const BusinessOrderByRelevanceFieldEnumSchema = z.enum(['name','email','photo','link','summary','richContent','description']);
+export const BusinessOrderByRelevanceFieldEnumSchema = z.enum([
+  'name',
+  'email',
+  'photo',
+  'link',
+  'summary',
+  'richContent',
+  'description',
+]);
 
-export const BusinessAddressOrderByRelevanceFieldEnumSchema = z.enum(['address']);
+export const BusinessAddressOrderByRelevanceFieldEnumSchema = z.enum([
+  'address',
+]);
 
 export const ReviewsOrderByRelevanceFieldEnumSchema = z.enum(['comment']);
 
-export const RichReviewContentOrderByRelevanceFieldEnumSchema = z.enum(['content']);
+export const RichReviewContentOrderByRelevanceFieldEnumSchema = z.enum([
+  'content',
+]);
 
-export const UserRoleSchema = z.enum(['USER','ADMIN','SUPERADMIN']);
+export const UserRoleSchema = z.enum(['USER', 'ADMIN', 'SUPERADMIN']);
 
-export type UserRoleType = `${z.infer<typeof UserRoleSchema>}`
+export type UserRoleType = `${z.infer<typeof UserRoleSchema>}`;
 
-export const VerificationTokenActionSchema = z.enum(['VERIFY','RESET']);
+export const VerificationTokenActionSchema = z.enum(['VERIFY', 'RESET']);
 
-export type VerificationTokenActionType = `${z.infer<typeof VerificationTokenActionSchema>}`
+export type VerificationTokenActionType = `${z.infer<
+  typeof VerificationTokenActionSchema
+>}`;
 
 /////////////////////////////////////////
 // MODELS
@@ -76,9 +186,9 @@ export const UserSchema = z.object({
   hashedPassword: z.string().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-})
+});
 
-export type User = z.infer<typeof UserSchema>
+export type User = z.infer<typeof UserSchema>;
 
 /////////////////////////////////////////
 // VERIFICATION TOKEN SCHEMA
@@ -91,9 +201,9 @@ export const VerificationTokenSchema = z.object({
   token: z.string(),
   expires: z.coerce.date(),
   createdAt: z.coerce.date(),
-})
+});
 
-export type VerificationToken = z.infer<typeof VerificationTokenSchema>
+export type VerificationToken = z.infer<typeof VerificationTokenSchema>;
 
 /////////////////////////////////////////
 // BUSINESS PARENT CATEGORY SCHEMA
@@ -106,9 +216,11 @@ export const BusinessParentCategorySchema = z.object({
   icon: z.string(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-})
+});
 
-export type BusinessParentCategory = z.infer<typeof BusinessParentCategorySchema>
+export type BusinessParentCategory = z.infer<
+  typeof BusinessParentCategorySchema
+>;
 
 /////////////////////////////////////////
 // BUSINESS CATEGORY SCHEMA
@@ -122,9 +234,9 @@ export const BusinessCategorySchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   parentCategoryId: z.number().int(),
-})
+});
 
-export type BusinessCategory = z.infer<typeof BusinessCategorySchema>
+export type BusinessCategory = z.infer<typeof BusinessCategorySchema>;
 
 /////////////////////////////////////////
 // BUSINESS SCHEMA
@@ -144,9 +256,9 @@ export const BusinessSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   categoryId: z.number().int(),
-})
+});
 
-export type Business = z.infer<typeof BusinessSchema>
+export type Business = z.infer<typeof BusinessSchema>;
 
 /////////////////////////////////////////
 // BUSINESS ADDRESS SCHEMA
@@ -160,9 +272,9 @@ export const BusinessAddressSchema = z.object({
   longitude: z.number(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-})
+});
 
-export type BusinessAddress = z.infer<typeof BusinessAddressSchema>
+export type BusinessAddress = z.infer<typeof BusinessAddressSchema>;
 
 /////////////////////////////////////////
 // BUSINESS ADMIN SCHEMA
@@ -174,9 +286,9 @@ export const BusinessAdminSchema = z.object({
   userId: z.number().int(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-})
+});
 
-export type BusinessAdmin = z.infer<typeof BusinessAdminSchema>
+export type BusinessAdmin = z.infer<typeof BusinessAdminSchema>;
 
 /////////////////////////////////////////
 // REVIEWS SCHEMA
@@ -190,9 +302,9 @@ export const ReviewsSchema = z.object({
   comment: z.string().nullable(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
-})
+});
 
-export type Reviews = z.infer<typeof ReviewsSchema>
+export type Reviews = z.infer<typeof ReviewsSchema>;
 
 /////////////////////////////////////////
 // RICH REVIEW CONTENT SCHEMA
@@ -204,6 +316,6 @@ export const RichReviewContentSchema = z.object({
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
   reviewId: z.number().int(),
-})
+});
 
-export type RichReviewContent = z.infer<typeof RichReviewContentSchema>
+export type RichReviewContent = z.infer<typeof RichReviewContentSchema>;

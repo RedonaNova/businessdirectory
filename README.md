@@ -131,7 +131,7 @@ src/
 ```bash
 # Development
 npm run dev:api              # Run API in development mode
-npx nx serve web             # Run Next.js app
+nx dev web             # Run Next.js app
 
 # Database
 npm run db:seed              # Seed database
