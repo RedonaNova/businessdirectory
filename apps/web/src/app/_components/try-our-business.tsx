@@ -8,7 +8,8 @@ export default async function TryOurBusiness() {
           Бизнесээ хөгжүүлэхийг хүсэж байна уу?
         </h4>
         <p className="text-black">
-          Radnaa's Directory дээр өөрсдийн итгэлээ үнэлгээтэй цуг хөгжүүлээрэй
+          Radnaa&apos;s Directory дээр өөрсдийн итгэлээ үнэлгээтэй цуг
+          хөгжүүлээрэй
         </p>
       </div>
       <div className="">

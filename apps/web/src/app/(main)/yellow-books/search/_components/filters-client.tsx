@@ -1,6 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FaSearch } from 'react-icons/fa';
 
 interface FiltersClientProps {
@@ -20,27 +20,28 @@ export default function FiltersClient({ initial }: FiltersClientProps) {
   const [isInsideMall, setIsInsideMall] = useState(initial.isInsideMall || '');
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Function to update URL with current filters
-  const updateSearch = (
-    newQuery: string,
-    newIsActive: string,
-    newIsInsideMall: string
-  ) => {
-    const params = new URLSearchParams();
+  // Function to update URL with current filters - memoized to prevent infinite loops
+  const updateSearch = useCallback(
+    (newQuery: string, newIsActive: string, newIsInsideMall: string) => {
+      const params = new URLSearchParams();
 
-    if (newQuery.trim()) {
-      params.set('q', newQuery.trim());
-    }
-    if (newIsActive) {
-      params.set('isActive', newIsActive);
-    }
-    if (newIsInsideMall) {
-      params.set('isInsideMall', newIsInsideMall);
-    }
+      if (newQuery.trim()) {
+        params.set('q', newQuery.trim());
+      }
+      if (newIsActive) {
+        params.set('isActive', newIsActive);
+      }
+      if (newIsInsideMall) {
+        params.set('isInsideMall', newIsInsideMall);
+      }
 
-    const queryString = params.toString();
-    router.push(`/yellow-books/search${queryString ? `?${queryString}` : ''}`);
-  };
+      const queryString = params.toString();
+      router.push(
+        `/yellow-books/search${queryString ? `?${queryString}` : ''}`
+      );
+    },
+    [router]
+  );
 
   // Track if component has mounted to avoid initial duplicate calls
   const isFirstRender = useRef(true);
@@ -69,7 +70,7 @@ export default function FiltersClient({ initial }: FiltersClientProps) {
         clearTimeout(debounceTimerRef.current);
       }
     };
-  }, [query]); // Only trigger on query changes
+  }, [query, isActive, isInsideMall, updateSearch]); // Include all dependencies
 
   // Immediate search for select changes
   useEffect(() => {
@@ -85,7 +86,7 @@ export default function FiltersClient({ initial }: FiltersClientProps) {
 
     // Immediate update for select changes
     updateSearch(query, isActive, isInsideMall);
-  }, [isActive, isInsideMall]); // Immediate update for selects
+  }, [isActive, isInsideMall, query, updateSearch]); // Include all dependencies
 
   const clearFilters = () => {
     setQuery('');
