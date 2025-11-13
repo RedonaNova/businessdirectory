@@ -3,12 +3,71 @@ import * as FaIcons from 'react-icons/fa';
 import { BusinessParentCategoryListResponse } from '@businessdirectory/database';
 import Link from 'next/link';
 export default async function CategoriesGrid() {
-  const categories = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/business-parent-categories?limit=50`
-  );
-  const categoriesData: BusinessParentCategoryListResponse[] = (
-    await categories.json()
-  ).data;
+  let categoriesData: BusinessParentCategoryListResponse[] = [];
+  
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+    if (!baseUrl) {
+      // Return empty state if no base URL (e.g., during build without backend)
+      return (
+        <div className="p-2 xl:p-0 w-full mt-10 flex flex-col gap-10">
+          <div className="flex justify-between items-center">
+            <h3>Компаниудыг төрлөөр хайцгаая</h3>
+          </div>
+          <div className="text-center text-muted py-10">
+            Categories will be loaded at runtime
+          </div>
+        </div>
+      );
+    }
+
+    const response = await fetch(`${baseUrl}/business-parent-categories?limit=50`, {
+      next: { revalidate: 60, tags: ['parent-categories'] },
+    });
+
+    if (!response.ok) {
+      // Return empty state if fetch fails
+      return (
+        <div className="p-2 xl:p-0 w-full mt-10 flex flex-col gap-10">
+          <div className="flex justify-between items-center">
+            <h3>Компаниудыг төрлөөр хайцгаая</h3>
+          </div>
+          <div className="text-center text-muted py-10">
+            Categories will be loaded at runtime
+          </div>
+        </div>
+      );
+    }
+
+    const data = await response.json();
+    categoriesData = data?.data || [];
+  } catch (error) {
+    // If fetch fails (e.g., backend not available during build), return empty state
+    console.warn('Error fetching categories, will load at runtime:', error);
+    return (
+      <div className="p-2 xl:p-0 w-full mt-10 flex flex-col gap-10">
+        <div className="flex justify-between items-center">
+          <h3>Компаниудыг төрлөөр хайцгаая</h3>
+        </div>
+        <div className="text-center text-muted py-10">
+          Categories will be loaded at runtime
+        </div>
+      </div>
+    );
+  }
+
+  if (categoriesData.length === 0) {
+    return (
+      <div className="p-2 xl:p-0 w-full mt-10 flex flex-col gap-10">
+        <div className="flex justify-between items-center">
+          <h3>Компаниудыг төрлөөр хайцгаая</h3>
+        </div>
+        <div className="text-center text-muted py-10">
+          No categories available
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-2 xl:p-0 w-full mt-10 flex flex-col gap-10">
