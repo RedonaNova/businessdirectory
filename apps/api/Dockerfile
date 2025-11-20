@@ -13,7 +13,7 @@ COPY apps/api/package.json ./apps/api/
 COPY libs/database/package.json ./libs/database/
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Copy source files
 COPY . .
@@ -44,13 +44,13 @@ COPY --from=builder /app/libs/database/package.json ./libs/database/package.json
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# Note: If Nx creates workspace_modules during build, copy it here:
-# COPY --from=builder /app/apps/api/dist/workspace_modules ./apps/api/dist/workspace_modules
+# Copy workspace_modules if they exist (Nx creates these for workspace dependencies)
+# Note: This will be included in the dist copy above if it exists
 
 # Install production dependencies from the built package.json
 WORKDIR /app/apps/api/dist
 RUN if [ -f "package.json" ]; then \
-      npm ci --only=production && \
+      npm ci --only=production --legacy-peer-deps && \
       npm cache clean --force; \
     fi
 

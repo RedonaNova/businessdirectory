@@ -13,7 +13,7 @@ COPY apps/web/package.json ./apps/web/
 COPY libs/database/package.json ./libs/database/
 
 # Install dependencies
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 # Copy source files
 COPY . .
@@ -43,7 +43,9 @@ COPY --from=builder /app/apps/web/public ./apps/web/public
 # Copy database library build output (required for runtime)
 COPY --from=builder /app/libs/database/dist ./libs/database/dist
 COPY --from=builder /app/libs/database/prisma ./libs/database/prisma
+# Copy Prisma client (generated in node_modules)
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Set working directory
 WORKDIR /app

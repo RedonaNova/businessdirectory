@@ -4,6 +4,7 @@ import { ResponseHandler } from '../utils/response';
 import { catchAsync } from '../utils/catchAsync';
 import { validate } from '../middlewares/validate';
 import { AppError } from '../utils/AppError';
+import { authorize, protect } from '../utils/protect';
 
 const router = Router();
 
@@ -56,6 +57,18 @@ router.get(
       res,
       validatedData,
       'Health check passed - Array validation successful'
+    );
+  })
+);
+router.post(
+  '/testSuperadmin',
+  protect,
+  authorize(['SUPERADMIN']),
+  catchAsync(async (req: Request, res: Response) => {
+    return ResponseHandler.success(
+      res,
+      { message: 'You are Super Admin, Harry Potter.' },
+      'You are Super Admin, Harry Potter.'
     );
   })
 );

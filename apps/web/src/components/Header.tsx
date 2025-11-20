@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Nav from './Nav';
 import MobileNav from './MobileNav';
 
-export default function Header() {
+export default async function Header() {
   return (
     <header className="py-2 bg-foreground xl:py-4">
       <div className="container text-white mx-auto flex justify-between items-center px-4">

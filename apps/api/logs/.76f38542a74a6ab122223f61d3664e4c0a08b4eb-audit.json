@@ -6,14 +6,14 @@
     "auditLog": "logs\\.76f38542a74a6ab122223f61d3664e4c0a08b4eb-audit.json",
     "files": [
         {
-            "date": 1762244452861,
-            "name": "logs\\2025-11-04_combined.log",
-            "hash": "fc9038d60f5ddf25bda65d9ff7d6ecd82debc67d9b7bbcb2276dd044e45220f9"
-        },
-        {
             "date": 1762402836066,
             "name": "logs\\2025-11-06_combined.log",
             "hash": "65952850ca085b7a37575f4d3b6252512e8f308bcd3bbf4fded2e4216ab9a56e"
+        },
+        {
+            "date": 1763605626724,
+            "name": "logs\\2025-11-20_combined.log",
+            "hash": "8b63cb1f0871eee6bbec62820c2398a97ab058ba52df80f95b6770597825f45b"
         }
     ],
     "hashType": "sha256"

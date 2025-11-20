@@ -14,7 +14,7 @@ export default async function TryOurBusiness() {
       </div>
       <div className="">
         <Link
-          href="/login?isBusiness=true"
+          href="/signin?isBusiness=true"
           className="text-secondary bg-white border-secondary border-2 px-4 py-2 rounded-xl hover:scale-105 transition-all duration-300"
         >
           Эхлэх

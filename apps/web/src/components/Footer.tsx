@@ -47,6 +47,9 @@ export default function Footer() {
             <Link className="text-white/80" href="/">
               Бизнесийн блог
             </Link>
+            <Link className="text-white/80" href="/editor">
+              Суперадмин булан
+            </Link>
           </div>
         </div>
       </div>

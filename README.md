@@ -2,7 +2,7 @@
 
 A full-stack business directory application built with an **Nx monorepo** architecture, combining a **SOLID-based Express API** and a **Next.js frontend** with shared libraries for type-safe database and schema management.
 
-## 🏗️ Architecture
+## Architecture
 
 ### Monorepo Structure
 
@@ -25,7 +25,7 @@ businessdirectory/
 - **Validation**: Zod schemas shared between API and Web
 - **TypeScript**: Full type safety across all projects
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -79,7 +79,7 @@ nx dev web
 
 The API will be available at `http://localhost:3333` and the web app at `http://localhost:4200`.
 
-## 📦 Shared Libraries
+## Shared Libraries
 
 ### `@businessdirectory/database`
 
@@ -101,7 +101,7 @@ This approach ensures:
 - **Type safety** across frontend and backend
 - **Code reusability** and maintainability
 
-## 🏛️ API Architecture (SOLID Principles)
+## API Architecture (SOLID Principles)
 
 The API follows SOLID principles with a layered architecture:
 
@@ -124,7 +124,7 @@ src/
 - Comprehensive logging (Winston + Morgan)
 - Dynamic pagination and filtering
 
-## 📝 Available Scripts
+## Available Scripts
 
 ```bash
 # Development
@@ -147,9 +147,6 @@ npx nx lint api              # Lint API
 npx nx lint web              # Lint Next.js app
 npx tsc --build              # TypeScript check all projects
 
-# Testing API Requirements (20 pts)
-cd apps/api && pwsh test-api-requirements.ps1  # Windows PowerShell
-cd apps/api && bash test-api-requirements.sh   # Linux/Mac
 ```
 
 ## 🔒 Authentication
