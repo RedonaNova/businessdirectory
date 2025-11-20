@@ -7,6 +7,7 @@ import { LoginSchema } from '@businessdirectory/database';
 import { loginAction } from '../actions';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import GitHubButton from './github-button';
 
 export default function SigninForm() {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +48,17 @@ export default function SigninForm() {
         <p className="text-sm text-muted mt-1">
           Нууцийг чинь ISO түвшинд хадгалах болно
         </p>
+      </div>
+
+      <GitHubButton />
+
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-border" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted">эсвэл</span>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">

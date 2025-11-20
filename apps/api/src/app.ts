@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import * as path from 'path';
+import passport from 'passport';
 import routes from './routes';
 import { errorHandler } from './middlewares/errorHandler';
 import morganMiddleware from './middlewares/loggerMiddleware';
@@ -48,6 +49,9 @@ export function createApp(): Application {
   // Body parsers
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+  // Initialize Passport
+  app.use(passport.initialize());
 
   // Logging
   app.use(morganMiddleware);

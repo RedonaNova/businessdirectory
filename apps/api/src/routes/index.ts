@@ -6,6 +6,7 @@ import businessRoutes from './business.route';
 import businessAddressRoutes from './business-address.route';
 import reviewRoutes from './review.route';
 import healthRoutes from './health.route';
+import authRoutes from './auth.route';
 
 const router = Router();
 
@@ -16,6 +17,9 @@ router.get('/health', (req, res) => {
 
 // Enhanced health routes with validation demos
 router.use('/health', healthRoutes);
+
+// Auth routes (OAuth)
+router.use('/auth', authRoutes);
 
 // API Routes
 router.use('/users', userRoutes);

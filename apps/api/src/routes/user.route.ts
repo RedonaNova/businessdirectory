@@ -7,6 +7,7 @@ import {
   createUserSchema,
   updateUserSchema,
   loginSchema,
+  oauthLoginSchema,
 } from '../validation/user.schema';
 import { validate } from '../middlewares/validate';
 import { protect, authorize } from '../utils/protect';
@@ -56,6 +57,11 @@ class UserRoute extends BaseRoute<User, CreateUserDTO, UpdateUserDTO> {
 
   private addAuthRoutes(controller: UserController): void {
     this.router.post('/login', validate(loginSchema), controller.login);
+    this.router.post(
+      '/oauth-login',
+      validate(oauthLoginSchema),
+      controller.oauthLogin
+    );
   }
 }
 

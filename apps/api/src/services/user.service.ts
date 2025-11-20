@@ -11,6 +11,7 @@ import {
   CreateUserDTO,
   UpdateUserDTO,
   LoginDTO,
+  OAuthLoginDTO,
 } from '../validation/user.schema';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
@@ -223,6 +224,74 @@ export class UserService extends BaseService<
 
     return {
       user: userWithoutPassword as User,
+      token,
+    };
+  }
+
+  async oauthLogin(
+    data: OAuthLoginDTO
+  ): Promise<{ user: User; token: string }> {
+    // Check if user exists by email
+    let user = await prisma.user.findUnique({
+      where: { email: data.email },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        phone: true,
+        role: true,
+        createdAt: true,
+        updatedAt: true,
+        hashedPassword: true,
+      },
+    });
+
+    // If user doesn't exist, create new user with USER role
+    if (!user) {
+      // Parse name into firstName and lastName if provided
+      const nameParts = data.name?.trim().split(' ') || [];
+      const firstName = nameParts[0] || null;
+      const lastName = nameParts.slice(1).join(' ') || null;
+
+      user = await prisma.user.create({
+        data: {
+          email: data.email,
+          firstName,
+          lastName,
+          role: 'USER',
+          hashedPassword: null, // OAuth users don't have passwords
+        },
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true,
+          phone: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+          hashedPassword: true,
+        },
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      {
+        id: user.id.toString(),
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '7d' }
+    );
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { hashedPassword, ...userWithoutPassword } = user;
+
+    return {
+      user: { ...userWithoutPassword, hashedPassword: null } as User,
       token,
     };
   }

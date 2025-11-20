@@ -104,3 +104,28 @@ export async function loginAction(
 export async function logoutAction(): Promise<void> {
   await signOut({ redirectTo: '/signin' });
 }
+
+export async function githubSignInAction(): Promise<{
+  success: boolean;
+  error?: string;
+}> {
+  try {
+    const result = await signIn('github', {
+      redirect: false,
+    });
+
+    if (result?.error) {
+      return {
+        success: false,
+        error: 'GitHub authentication failed',
+      };
+    }
+
+    return { success: true };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: 'An unexpected error occurred' };
+  }
+}

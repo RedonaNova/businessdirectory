@@ -24,7 +24,18 @@ export const loginSchema = z.object({
   body: LoginSchema,
 });
 
+export const oauthLoginSchema = z.object({
+  body: z.object({
+    email: z.string().email('Invalid email format'),
+    name: z.string().optional(),
+  }),
+});
+
 // Re-export types from shared schemas
 export type CreateUserDTO = CreateUserInput;
 export type UpdateUserDTO = UpdateUserInput;
 export type LoginDTO = LoginInput;
+export type OAuthLoginDTO = {
+  email: string;
+  name?: string;
+};

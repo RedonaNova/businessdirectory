@@ -6,6 +6,7 @@ import {
   CreateUserDTO,
   UpdateUserDTO,
   LoginDTO,
+  OAuthLoginDTO,
 } from '../validation/user.schema';
 import { QueryBuilder } from '../utils/pagination';
 import { catchAsync } from '../utils/catchAsync';
@@ -49,5 +50,17 @@ export class UserController extends BaseController<
     const { user, token } = await this.userService.login(req.body as LoginDTO);
 
     return ResponseHandler.success(res, { user, token }, 'Login successful');
+  });
+
+  oauthLogin = catchAsync(async (req: Request, res: Response) => {
+    const { user, token } = await this.userService.oauthLogin(
+      req.body as OAuthLoginDTO
+    );
+
+    return ResponseHandler.success(
+      res,
+      { user, token },
+      'OAuth login successful'
+    );
   });
 }

@@ -26,6 +26,7 @@ interface LoginResponse {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  trustHost: true, // Required for NextAuth v5 in development
   providers: [
     Credentials({
       name: 'Credentials',
@@ -35,10 +36,62 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
       async authorize(credentials) {
         try {
-          // Validate credentials with zod
+          const email = credentials?.email;
+          const password = credentials?.password;
+
+          if (!email) {
+            return null;
+          }
+
+          // Check if this is an OAuth token-based login
+          if (
+            password &&
+            typeof password === 'string' &&
+            password.startsWith('__OAUTH_TOKEN__')
+          ) {
+            const token = password.replace('__OAUTH_TOKEN__', '');
+
+            // Verify token with backend to get user info
+            const decoded = JSON.parse(
+              Buffer.from(token.split('.')[1], 'base64').toString()
+            );
+
+            const response = await fetch(`${baseUrl}/users/${decoded.id}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (!response.ok) {
+              return null;
+            }
+
+            const result = await response.json();
+
+            if (!result.success || !result.data) {
+              return null;
+            }
+
+            const user = result.data;
+
+            // Return user object that will be stored in session
+            return {
+              id: user.id.toString(),
+              email: user.email,
+              name: user.firstName
+                ? `${user.firstName} ${user.lastName || ''}`.trim()
+                : user.email,
+              role: user.role,
+              token: token, // Store token for API calls
+            };
+          }
+
+          // Regular credentials login
           const validatedCredentials = LoginSchema.parse({
-            email: credentials?.email,
-            password: credentials?.password,
+            email,
+            password,
           });
 
           // Call your API to authenticate
@@ -84,8 +137,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       // Initial sign in
       if (user) {
         token.id = user.id;
-        token.role = user.role;
-        token.accessToken = user.token;
+        token.role = (user as any).role;
+        token.accessToken = (user as any).token;
       }
       return token;
     },
@@ -102,4 +155,5 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     signOut: '/signin',
   },
   secret: process.env.AUTH_SECRET,
+  debug: process.env.NODE_ENV === 'development', // Enable debug in development
 });
